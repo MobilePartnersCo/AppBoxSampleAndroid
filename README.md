@@ -1,4 +1,3 @@
-
 # AppBox SDK
 
 - AppBox SDK는 모바일 웹사이트를 앱으로 패키징하여 최소한의 개발로 구글 플레이 및 앱스토어에 등록할 수 있는 솔루션입니다. 
@@ -21,7 +20,10 @@
 
 ## 샘플 앱 다운로드
 
-GooglePlay : https://play.google.com/store/apps/details?id=kr.co.mobpa.appbox  
+***큐알 이미지 노출***
+(앱박스앱의 android 구글플레이, iOS 앱스토어 링크로 분기해서 오픈될 수 있는 QR 이미지를 노출합니다.)
+
+GooglePlay : https://play.google.com/store/apps/details?id=kr.co.mobpa.appbox
 AppStore : https://apps.apple.com/kr/app/id1434076103
 
 ---
@@ -41,26 +43,36 @@ AppBox SDK는 [JitPack](https://jitpack.io) 저장소를 통해 제공됩니다.
 
 ### Gradle 설정
 
-#### 1. 프로젝트 수준의 `build.gradle` 파일 수정
+#### 1. 프로젝트 수준의 build.gradle 파일 수정
 
-```gradle
+프로젝트의 build.gradle 파일에 JitPack 저장소를 추가합니다.
+
+gradle
 repositories {
     google()
     mavenCentral()
     maven {
         url = uri("https://jitpack.io")
+        // --------------------------------------------------------------
         // SDK 접근 설정
+        // --------------------------------------------------------------
         credentials {
             username = "jp_gv49u3alugbbocfovlkfnvdt8a"
         }
+        // --------------------------------------------------------------
     }
 }
-```
 
-#### 2. 앱 수준의 `build.gradle` 파일에 SDK 의존성 추가
 
-```gradle
+#### 2. 앱 수준의 build.gradle 파일에 SDK 의존성 추가
+
+아래 의존성을 추가합니다:
+
+gradle
 dependencies {
+    // --------------------------------------------------------------
+    // implementation 선언
+    // --------------------------------------------------------------
     implementation("org.bitbucket.insystems_moon:appboxpackage:1.0.21")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
@@ -72,14 +84,21 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    // --------------------------------------------------------------
 }
-```
 
-#### 3. `gradle.properties`에 Jetifier 활성화
 
-```gradle
+#### 3. gradle.properties에 Jetifier 활성화
+
+Jetifier를 활성화하려면 gradle.properties 파일에 다음 설정을 추가합니다:
+
+gradle
+# --------------------------------------------------------------
+# enableJetifier 설정
+# --------------------------------------------------------------
 android.enableJetifier=true
-```
+# --------------------------------------------------------------
+
 
 ---
 
@@ -87,79 +106,129 @@ android.enableJetifier=true
 
 ### 1. SDK 초기화
 
-```kotlin
+AppBox SDK를 사용하려면 먼저 초기화를 수행해야 합니다. initSDK 메서드를 호출하여 초기화를 완료하세요.
+
+#### 예제 코드:
+
+kotlin
+// --------------------------------------------------------------
+// AppBox WebConfig 설정
+// --------------------------------------------------------------
 val appBoxWebConfig = AppBoxWebConfig().apply {
     javaScriptEnabled = true
 }
+// --------------------------------------------------------------
 
+// --------------------------------------------------------------
+// AppBox 초기화
+// --------------------------------------------------------------
 AppBox.getInstance().initSDK(
     context = this,
     baseUrl = "https://www.example.com",
     debugMode = true,
     webConfig = appBoxWebConfig
 )
-```
+// --------------------------------------------------------------
+
+
+---
 
 ### 2. SDK 실행
 
-```kotlin
+초기화된 SDK를 실행하려면 start 메서드를 호출하세요. 실행 결과는 콜백을 통해 전달됩니다.
+
+#### 예제 코드:
+
+kotlin
+// --------------------------------------------------------------
+// AppBox 실행
+// --------------------------------------------------------------
 AppBox.getInstance().start { isSuccess, message ->
     if (isSuccess) {
+        // 실행 성공 처리
         Log.d("AppBox", "SDK 실행 성공")
     } else {
+        // 실행 실패 처리
         Log.e("AppBox", "SDK 실행 실패: $message")
     }
 }
-```
+// --------------------------------------------------------------
+
+
+---
 
 ### 3. 추가 기능 설정
 
 #### 푸시 토큰 설정
 
-```kotlin
-AppBox.getInstance().setPushToken(token = "푸시 토큰 값")
-```
+kotlin
+// --------------------------------------------------------------
+// AppBox 푸시 토큰 설정
+// --------------------------------------------------------------
+AppBox.getInstance().setPushToken(
+    token = "푸시 토큰 값"
+)
+// --------------------------------------------------------------
+
 
 #### 푸시 아이콘 설정
 
-```kotlin
-AppBox.getInstance().setPushIcon(icon = R.drawable.ic_launcher_background)
-```
+kotlin
+// --------------------------------------------------------------
+// AppBox 푸시 아이콘 설정
+// --------------------------------------------------------------
+AppBox.getInstance().setPushIcon(
+    icon = R.drawable.ic_launcher_background
+)
+// --------------------------------------------------------------
+
 
 #### 인트로 설정
 
-```kotlin
+kotlin
+// --------------------------------------------------------------
+// 인트로 설정
+// --------------------------------------------------------------
 AppBox.getInstance().setIntro(
     items = mutableListOf("https://www.example1.com", "https://www.example2.com")
 )
-```
+// --------------------------------------------------------------
+
 
 #### 당겨서 새로고침 설정
 
-```kotlin
-AppBox.getInstance().setPullDownRefresh(used = true)
-```
+kotlin
+// --------------------------------------------------------------
+// 당겨서 새로고침 설정
+// --------------------------------------------------------------
+AppBox.getInstance().setPullDownRefresh(
+    used = true
+)
+// --------------------------------------------------------------
+
 
 ---
 
 ## 요구 사항
 
-- **Android** 8.0 이상  
+- **Android** 8.0 이상
 - **Gradle Version** 8.7
 
 ---
 
 ## 주의 사항
 
-1. **초기화 필수**  
-   `initSDK`를 호출하여 SDK를 초기화한 후에만 다른 기능을 사용할 수 있습니다.
+1. **초기화 필수**
+   - initSDK를 호출하여 SDK를 초기화한 후에만 다른 기능을 사용할 수 있습니다.
+   - 초기화를 수행하지 않으면 실행 시 예외가 발생할 수 있습니다.
 
-2. **네트워크 권한**  
-   `AndroidManifest.xml` 파일에 다음 권한을 추가하세요:
+2. **네트워크 권한**
+   - SDK는 네트워크 권한이 필요합니다. AndroidManifest.xml 파일에 다음 권한을 추가하세요:
 
-   ```xml
-   <uses-permission android:name="android.permission.INTERNET" />
-   ```
+     
+xml
+     <uses-permission android:name="android.permission.INTERNET" />
+
 
 ---
 
@@ -167,5 +236,7 @@ AppBox.getInstance().setPullDownRefresh(used = true)
 
 문제가 발생하거나 추가 지원이 필요한 경우 아래로 연락하세요:
 
-- **이메일**: [contact@mobpa.co.kr](mailto:contact@mobpa.co.kr)  
+- **이메일**: [contact@mobpa.co.kr](mailto:contact@mobpa.co.kr)
 - **홈페이지**: [https://www.appboxapp.com](https://www.appboxapp.com)
+
+---
