@@ -1,5 +1,5 @@
 # AppBox SDK
-[![](https://jitpack.io/v/org.bitbucket.insystems_moon/appboxpackage.svg)](https://jitpack.io/#org.bitbucket.insystems_moon/appboxpackage) [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
+[![](https://jitpack.io/v/org.bitbucket.insystems_moon/PPChartSDK-Android.svg)](https://jitpack.io/#org.bitbucket.insystems_moon/PPChartSDK-Android) [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
 
 - AppBox SDK는 모바일 웹사이트를 앱으로 패키징하여 최소한의 개발로 구글 플레이 및 앱스토어에 등록할 수 있는 솔루션입니다. 
 - 앱박스는 모바일 웹사이트에서 자바스크립트 코드를 사용해서 앱의 기능을 사용할 수 있게 하는 솔루션으로 아래 40여가지 기능을 무료로 사용가능합니다.
