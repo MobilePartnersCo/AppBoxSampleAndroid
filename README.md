@@ -24,7 +24,7 @@
 (앱박스앱의 android 구글플레이, iOS 앱스토어 링크로 분기해서 오픈될 수 있는 QR 이미지를 노출합니다.)
 
 - GooglePlay : https://play.google.com/store/apps/details?id=kr.co.mobpa.appbox
-- AppStore : https://apps.apple.com/kr/app/id1434076103
+- AppStore : https://apps.apple.com/kr/app/id6737824370
 
 ---
 
