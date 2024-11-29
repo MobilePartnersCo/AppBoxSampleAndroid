@@ -227,11 +227,10 @@ AppBox.getInstance().setPullDownRefresh(
 
 2. **네트워크 권한**
    - SDK는 네트워크 권한이 필요합니다. AndroidManifest.xml 파일에 다음 권한을 추가하세요:
-
      
-xml
+```
      <uses-permission android:name="android.permission.INTERNET" />
-
+```
 
 ---
 
