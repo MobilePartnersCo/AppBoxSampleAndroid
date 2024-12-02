@@ -22,8 +22,6 @@
 
 ## 데모앱 다운로드
 
-***큐알 이미지 노출***
-
 - GooglePlay : https://play.google.com/store/apps/details?id=kr.co.mobpa.appbox
 - AppStore : https://apps.apple.com/kr/app/id6737824370
 
