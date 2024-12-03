@@ -61,19 +61,16 @@ AppBox SDK는 [JitPack](https://jitpack.io) 저장소를 통해 제공됩니다.
 프로젝트의 build.gradle 파일에 JitPack 저장소를 추가합니다.
 
 ```
-gradle
 repositories {
     google()
     mavenCentral()
     maven {
         url = uri("https://jitpack.io")
-        // --------------------------------------------------------------
+
         // SDK 접근 설정
-        // --------------------------------------------------------------
         credentials {
             username = "jp_gv49u3alugbbocfovlkfnvdt8a"
         }
-        // --------------------------------------------------------------
     }
 }
 ```
@@ -85,9 +82,8 @@ repositories {
 
 ```
 dependencies {
-    // --------------------------------------------------------------
+
     // implementation 선언
-    // --------------------------------------------------------------
     implementation("org.bitbucket.insystems_moon:appboxpackage:1.0.21")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
@@ -99,7 +95,6 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    // --------------------------------------------------------------
 }
 ```
 
@@ -109,11 +104,8 @@ dependencies {
 Jetifier를 활성화하려면 gradle.properties 파일에 다음 설정을 추가합니다:
 
 ```
-# --------------------------------------------------------------
 # enableJetifier 설정
-# --------------------------------------------------------------
 android.enableJetifier=true
-# --------------------------------------------------------------
 ```
 
 ---
@@ -127,24 +119,18 @@ AppBox SDK를 사용하려면 먼저 초기화를 수행해야 합니다. initSD
 #### 예제 코드:
 
 ```
-// --------------------------------------------------------------
 // AppBox WebConfig 설정
-// --------------------------------------------------------------
 val appBoxWebConfig = AppBoxWebConfig().apply {
     javaScriptEnabled = true
 }
-// --------------------------------------------------------------
 
-// --------------------------------------------------------------
 // AppBox 초기화
-// --------------------------------------------------------------
 AppBox.getInstance().initSDK(
     context = this,
     baseUrl = "https://www.example.com",
     debugMode = true,
     webConfig = appBoxWebConfig
 )
-// --------------------------------------------------------------
 ```
 
 ---
@@ -156,9 +142,7 @@ AppBox.getInstance().initSDK(
 #### 예제 코드:
 
 ```
-// --------------------------------------------------------------
 // AppBox 실행
-// --------------------------------------------------------------
 AppBox.getInstance().start { isSuccess, message ->
     if (isSuccess) {
         // 실행 성공 처리
@@ -168,7 +152,6 @@ AppBox.getInstance().start { isSuccess, message ->
         Log.e("AppBox", "SDK 실행 실패: $message")
     }
 }
-// --------------------------------------------------------------
 ```
 
 ---
@@ -182,13 +165,10 @@ AppBox SDK 실행 전 추가 기능이 설정이 되어야 적용이 됩니다.
 FCM 푸시 토큰을 저장합니다.
 
 ```
-// --------------------------------------------------------------
 // AppBox 푸시 토큰 설정
-// --------------------------------------------------------------
 AppBox.getInstance().setPushToken(
     token = "푸시 토큰 값"
 )
-// --------------------------------------------------------------
 ```
 
 #### 푸시 아이콘 설정
@@ -196,13 +176,10 @@ AppBox.getInstance().setPushToken(
 푸시를 받기 위해 설정합니다.
 
 ```
-// --------------------------------------------------------------
 // AppBox 푸시 아이콘 설정
-// --------------------------------------------------------------
 AppBox.getInstance().setPushIcon(
     icon = R.drawable.ic_launcher_background
 )
-// --------------------------------------------------------------
 ```
 
 #### 인트로 설정
@@ -210,13 +187,10 @@ AppBox.getInstance().setPushIcon(
 최초 앱 설치 후 AppBox SDK를 실행 시 인트로 화면이 노출됩니다.
 
 ```
-// --------------------------------------------------------------
 // 인트로 설정
-// --------------------------------------------------------------
 AppBox.getInstance().setIntro(
     items = mutableListOf("https://www.example1.com", "https://www.example2.com")
 )
-// --------------------------------------------------------------
 ```
 
 #### 당겨서 새로고침 설정
@@ -226,13 +200,10 @@ AppBox.getInstance().setIntro(
 사용여부 설정에 따라서 당겨서 새로고침 기능이 적용이 됩니다.
 
 ```
-// --------------------------------------------------------------
 // 당겨서 새로고침 설정
-// --------------------------------------------------------------
 AppBox.getInstance().setPullDownRefresh(
     used = true
 )
-// --------------------------------------------------------------
 ```
 
 ---
