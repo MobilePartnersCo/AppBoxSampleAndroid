@@ -1,6 +1,6 @@
 ![AppBox 데모](images/AppboxVisual.jpg)
 
-# AppBox SDK
+# AppBox SDK 사용 샘플소스
 [![Custom Badge](https://img.shields.io/badge/JitPack-1.0.0-green.svg)](https://jitpack.io)
 [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
 
