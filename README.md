@@ -82,7 +82,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:1.0.22")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:1.0.23")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
