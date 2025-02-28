@@ -82,7 +82,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("org.bitbucket.insystems_moon:appboxpackage:1.0.21")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:1.0.22")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
@@ -126,8 +126,10 @@ val appBoxWebConfig = AppBoxWebConfig().apply {
 AppBox.getInstance().initSDK(
     context = this,
     baseUrl = "https://www.example.com",
+    projectId = "프로젝트 아이디",
     debugMode = true,
-    webConfig = appBoxWebConfig
+    webConfig = appBoxWebConfig,
+    pushIcon = R.drawable.ic_launcher_background
 )
 ```
 
@@ -158,25 +160,25 @@ AppBox.getInstance().start { isSuccess, message ->
 
 AppBox SDK 실행 전 추가 기능이 설정이 되어야 적용이 됩니다.
 
-#### 푸시 토큰 설정
+#### BaseUrl 설정
 
-FCM 푸시 토큰을 저장합니다.
+실행되는 BaseUrl을 설정합니다.
 
 ```
-// AppBox 푸시 토큰 설정
-AppBox.getInstance().setPushToken(
-    token = "푸시 토큰 값"
+// AppBox BaseUrl 설정
+AppBox.getInstance().setBaseUrl(
+   baseUrl = "https://www.example.com"
 )
 ```
 
-#### 푸시 아이콘 설정
+#### 디버그 모드 설정
 
-푸시를 받기 위해 설정합니다.
+디버그 모드를 설정합니다.
 
 ```
-// AppBox 푸시 아이콘 설정
-AppBox.getInstance().setPushIcon(
-    icon = R.drawable.ic_launcher_background
+// AppBox 디버그 설정
+AppBox.getInstance().setDebug(
+   debugMode = true
 )
 ```
 
@@ -185,9 +187,22 @@ AppBox.getInstance().setPushIcon(
 최초 앱 설치 후 AppBox SDK를 실행 시 인트로 화면이 노출됩니다.
 
 ```
+// AppBox AppBoxIntro 설정
+val appBoxIntro = AppBoxIntro(
+   indicatorDefColor = "#FF0000",
+   indicatorSelColor = "#00FF00",
+   fontColor = "#0000FF",
+   item = mutableListOf(
+       AppBoxIntroItems(imageUrl =  "https://www.example1.com"),
+       AppBoxIntroItems(imageUrl =  "https://www.example2.com"),
+       AppBoxIntroItems(imageUrl =  "https://www.example3.com"),
+       AppBoxIntroItems(imageUrl =  "https://www.example4.com")
+   )
+)
+
 // 인트로 설정
 AppBox.getInstance().setIntro(
-    items = mutableListOf("https://www.example1.com", "https://www.example2.com")
+   appBoxIntro = appBoxIntro
 )
 ```
 
@@ -216,7 +231,7 @@ AppBox.getInstance().setPullDownRefresh(
 ## 주의 사항
 
 1. **초기화 필수**
-   - initSDK를 호출하여 SDK를 초기화한 후에만 다른 기능을 사용할 수 있습니다.
+   - initSDK를 호출하여 SDK를 초기화한 후에만 사용할 수 있습니다.
    - 초기화를 수행하지 않으면 실행 시 예외가 발생할 수 있습니다.
 
 2. **네트워크 권한**

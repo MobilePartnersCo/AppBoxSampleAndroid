@@ -2,61 +2,60 @@ package kr.co.mobpa.appbox.sdkSample
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kr.co.mobpa.waveAppSuiteSdk.AppBox
-import kr.co.mobpa.waveAppSuiteSdk.data.AppBoxWebConfig
+import kr.co.mobpa.waveAppSuiteSdk.data.AppBoxIntro
+import kr.co.mobpa.waveAppSuiteSdk.data.AppBoxIntroItems
 
 class MainActivityKotlin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // --------------------------------------------------------------
-        // AppBox WebConfig 설정
-        // --------------------------------------------------------------
-        val appBoxWebConfig = AppBoxWebConfig().apply {
-            javaScriptEnabled = true
-        }
-        // --------------------------------------------------------------
+        AppBox
 
         // --------------------------------------------------------------
-        // AppBox 초기화
+        // AppBox URL 변경
         // --------------------------------------------------------------
-        AppBox.getInstance().initSDK(
-            context = this,
-            baseUrl = "https://www.example.com",
-            debugMode = true,
-            webConfig = appBoxWebConfig
+        AppBox.getInstance().setBaseUrl(
+            baseUrl = "https://www.example.com"
         )
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
-        // AppBox 푸시 토큰 설정
+        // AppBox 디버그 변경
         // --------------------------------------------------------------
-        AppBox.getInstance().setPushToken(
-            token = "푸시 토큰 값"
+        AppBox.getInstance().setDebug(
+            debugMode = true
         )
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
-        // AppBox 푸시 아이콘 설정
+        // AppBox AppBoxIntro 설정
         // --------------------------------------------------------------
-        AppBox.getInstance().setPushIcon(
-            icon = R.drawable.ic_launcher_background
+        val appBoxIntro = AppBoxIntro(
+            indicatorDefColor = "#FF0000",
+            indicatorSelColor = "#00FF00",
+            fontColor = "#0000FF",
+            item = mutableListOf(
+                AppBoxIntroItems(imageUrl =  "https://www.example1.com"),
+                AppBoxIntroItems(imageUrl =  "https://www.example2.com"),
+                AppBoxIntroItems(imageUrl =  "https://www.example3.com"),
+                AppBoxIntroItems(imageUrl =  "https://www.example4.com")
+            )
         )
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
-        // 인트로 설정
+        // AppBox 인트로 설정
         // --------------------------------------------------------------
         AppBox.getInstance().setIntro(
-            items = mutableListOf("https://www.example1.com", "https://www.example2.com")
+            appBoxIntro = appBoxIntro
         )
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
-        // 당겨서 새로고침 설정
+        // AppBox 당겨서 새로고침 설정
         // --------------------------------------------------------------
         AppBox.getInstance().setPullDownRefresh(
             used = true
