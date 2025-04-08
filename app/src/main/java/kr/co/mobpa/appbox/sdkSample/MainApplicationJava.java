@@ -27,7 +27,6 @@ public class MainApplicationJava extends Application {
                 appBoxWebConfig,
                 R.drawable.ic_launcher_background
         );
-        AppBox.getInstance().setDebug(true);
         // --------------------------------------------------------------
     }
 }

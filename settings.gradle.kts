@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             // SDK 접근 설정
             // --------------------------------------------------------------
             credentials {
-                username = "jp_gv49u3alugbbocfovlkfnvdt8a"
+                username = "jp_ku9piga59cvtv8rlos3utncvms"
             }
             // --------------------------------------------------------------
 

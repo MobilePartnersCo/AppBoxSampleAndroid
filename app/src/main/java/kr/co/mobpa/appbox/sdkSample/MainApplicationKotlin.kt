@@ -26,7 +26,6 @@ class MainApplicationKotlin : Application() {
             webConfig = appBoxWebConfig,
             pushIcon = R.drawable.ic_launcher_background
         )
-        AppBox.getInstance().setDebug(true)
         // --------------------------------------------------------------
     }
 }
