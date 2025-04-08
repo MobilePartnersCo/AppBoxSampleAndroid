@@ -224,18 +224,14 @@ AppBox.getInstance().setPullDownRefresh(
    - initSDK를 호출하여 SDK를 초기화한 후에만 사용할 수 있습니다.
    - 초기화를 수행하지 않으면 실행 시 예외가 발생할 수 있습니다.
 
-2. **네트워크 권한**
-   - SDK는 네트워크 권한이 필요합니다. AndroidManifest.xml 파일에 다음 권한을 추가하세요:
-     
-```
-     <uses-permission android:name="android.permission.INTERNET" />
-```
-
-3. **AndroidManifest 설정**
+2. **AndroidManifest 설정**
    - AndroidManifest.xml 파일에 다음 설정을 확인하세요:
+   - INTERNET 권한 추가
    - allowBackup, fullBackupContent 값을 false로 설정
      
 ```
+      <uses-permission android:name="android.permission.INTERNET" />
+
       <application
         android:allowBackup="false"
         android:fullBackupContent="false">
