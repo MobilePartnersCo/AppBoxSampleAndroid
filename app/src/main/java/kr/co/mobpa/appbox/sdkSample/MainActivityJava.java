@@ -58,10 +58,10 @@ public class MainActivityJava extends AppCompatActivity {
         AppBox.getInstance().start((isSuccess, message) -> {
             if (isSuccess) {
                 // 실행 성공 처리
-                Log.d("AppBox", "SDK 실행 성공");
+                Log.d("AppBoxJava", "SDK 실행 성공");
             } else {
                 // 실행 실패 처리
-                Log.e("AppBox", "SDK 실행 실패: " + message);
+                Log.e("AppBoxJava", "SDK 실행 실패: " + message);
             }
             return null;
         });

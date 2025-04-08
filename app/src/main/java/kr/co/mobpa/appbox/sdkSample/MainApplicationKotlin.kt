@@ -22,11 +22,11 @@ class MainApplicationKotlin : Application() {
         AppBox.getInstance().initSDK(
             context = this,
             baseUrl = "https://www.example.com",
-            projectId = "프로젝트 아이디",
-            debugMode = true,
+            projectId = "PROJECT_ID",
             webConfig = appBoxWebConfig,
             pushIcon = R.drawable.ic_launcher_background
         )
+        AppBox.getInstance().setDebug(true)
         // --------------------------------------------------------------
     }
 }

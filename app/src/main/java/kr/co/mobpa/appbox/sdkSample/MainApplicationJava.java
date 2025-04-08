@@ -23,11 +23,11 @@ public class MainApplicationJava extends Application {
         AppBox.getInstance().initSDK(
                 this,
                 "https://www.example.com",
-                "프로젝트 아이디",
-                true,
+                "PROJECT_ID",
                 appBoxWebConfig,
                 R.drawable.ic_launcher_background
         );
+        AppBox.getInstance().setDebug(true);
         // --------------------------------------------------------------
     }
 }
