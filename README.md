@@ -83,16 +83,7 @@ dependencies {
 
     // implementation 선언
     implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.26")
-    implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("com.google.zxing:core:3.4.1")
-    implementation("com.google.android.play:app-update-ktx:2.1.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    implementation("androidx.health.connect:connect-client:1.1.0-alpha07")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 }
 ```
 
