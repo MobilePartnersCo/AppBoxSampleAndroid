@@ -231,7 +231,7 @@ AppBox.getInstance().setPullDownRefresh(
      <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-3. **네트워크 권한**
+3. **AndroidManifest 설정**
    - AndroidManifest.xml 파일에 다음 설정을 확인하세요:
    - allowBackup, fullBackupContent 값을 false로 설정
      
