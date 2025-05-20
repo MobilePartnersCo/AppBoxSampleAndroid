@@ -238,6 +238,13 @@ AppBox.getInstance().setPullDownRefresh(
       </application>
 ```
 
+3. **Proguard 설정**
+   - Proguard 사용시 코드 추가
+
+```
+      -keep class kr.co.mobpa.appBoxSDK.** { *; }
+```
+
 
 ---
 
