@@ -238,7 +238,26 @@ AppBox.getInstance().setPullDownRefresh(
       </application>
 ```
 
-3. **Proguard 설정**
+3. **사용중인 라이브러리 목록**
+    - androidx.core:core-ktx:1.13.1
+    - androidx.appcompat:appcompat:1.7.0
+    - androidx.activity:activity-compose:1.8.2
+    - com.google.android.material:material:1.12.0
+    - com.google.firebase:firebase-messaging:24.1.1
+    - com.google.android.gms:play-services-ads-identifier:18.2.0
+    - com.google.code.gson:gson:2.13.1
+    - com.github.bumptech.glide:glide:4.16.0
+    - androidx.biometric:biometric-ktx:1.2.0-alpha05
+    - com.journeyapps:zxing-android-embedded:4.3.0
+    - com.google.zxing:core:3.4.1
+    - com.google.android.play:app-update-ktx:2.1.0
+    - com.google.android.play:review-ktx:2.0.2
+    - com.github.chrisbanes:PhotoView:2.3.0
+    - androidx.health.connect:connect-client:1.1.0-alpha07
+    - com.github.prolificinteractive:material-calendarview:2.0.1
+    - androidx.swiperefreshlayout:swiperefreshlayout:1.1.0
+
+4. **Proguard 설정**
    - Proguard 사용시 코드 추가
 
 ```
