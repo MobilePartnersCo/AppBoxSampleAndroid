@@ -82,7 +82,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.27")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.28")
 
 }
 ```
