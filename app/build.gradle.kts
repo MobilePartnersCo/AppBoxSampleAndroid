@@ -48,6 +48,6 @@ dependencies {
     // --------------------------------------------------------------
     // implementation 선언
     // --------------------------------------------------------------
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.28")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.29")
     // --------------------------------------------------------------
 }
