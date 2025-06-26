@@ -25,6 +25,7 @@ public class MainApplicationJava extends Application {
                 "https://www.example.com",
                 "PROJECT_ID",
                 appBoxWebConfig,
+                true,
                 R.drawable.ic_launcher_background
         );
         // --------------------------------------------------------------

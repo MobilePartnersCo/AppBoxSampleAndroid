@@ -24,6 +24,7 @@ class MainApplicationKotlin : Application() {
             baseUrl = "https://www.example.com",
             projectId = "PROJECT_ID",
             webConfig = appBoxWebConfig,
+            debugMode = true,
             pushIcon = R.drawable.ic_launcher_background
         )
         // --------------------------------------------------------------
