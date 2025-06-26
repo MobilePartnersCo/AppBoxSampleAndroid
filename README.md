@@ -119,6 +119,7 @@ AppBox.getInstance().initSDK(
     baseUrl = "https://www.example.com",
     projectId = "PROJECT_ID",
     webConfig = appBoxWebConfig,
+    debugMode = true,
     pushIcon = R.drawable.ic_launcher_background
 )
 ```
@@ -158,17 +159,6 @@ AppBox SDK 실행 전 추가 기능이 설정이 되어야 적용이 됩니다.
 // AppBox BaseUrl 설정
 AppBox.getInstance().setBaseUrl(
    baseUrl = "https://www.example.com"
-)
-```
-
-#### 디버그 모드 설정
-
-디버그 모드를 설정합니다.
-
-```
-// AppBox 디버그 설정
-AppBox.getInstance().setDebug(
-   debugMode = true
 )
 ```
 
