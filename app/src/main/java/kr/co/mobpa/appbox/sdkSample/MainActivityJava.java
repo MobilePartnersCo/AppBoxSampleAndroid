@@ -18,12 +18,6 @@ public class MainActivityJava extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // --------------------------------------------------------------
-        // AppBox URL 변경
-        // --------------------------------------------------------------
-        AppBox.getInstance().setBaseUrl("https://www.example.com");
-        // --------------------------------------------------------------
-
-        // --------------------------------------------------------------
         // AppBox AppBoxIntro 설정
         // --------------------------------------------------------------
         List<AppBoxIntroItems> introList = new ArrayList<>();

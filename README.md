@@ -82,7 +82,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.29")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.31")
 
 }
 ```
@@ -150,17 +150,6 @@ AppBox.getInstance().start { isSuccess, message ->
 ### 3. 추가 기능 설정
 
 AppBox SDK 실행 전 추가 기능이 설정이 되어야 적용이 됩니다.
-
-#### BaseUrl 설정
-
-실행되는 BaseUrl을 설정합니다.
-
-```
-// AppBox BaseUrl 설정
-AppBox.getInstance().setBaseUrl(
-   baseUrl = "https://www.example.com"
-)
-```
 
 #### 인트로 설정
 
