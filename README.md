@@ -82,7 +82,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.31")
+    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.32")
 
 }
 ```
@@ -240,7 +240,7 @@ AppBox.getInstance().setPullDownRefresh(
    - Proguard 사용시 코드 추가
 
 ```
-      -keep class kr.co.mobpa.appBoxSDK.** { *; }
+      -keep class kr.co.mobpa.waveAppSuiteSdk.** { *; }
 ```
 
 
