@@ -25,7 +25,11 @@ class MainApplicationKotlin : Application() {
             projectId = "PROJECT_ID",
             webConfig = appBoxWebConfig,
             debugMode = true,
-            pushIcon = R.drawable.ic_launcher_background
+            pushIcon = R.drawable.ic_launcher_background,
+            kakaoNativeAppKey = "",
+            naverClientId = "",
+            naverSecret = "",
+            googleClientId = ""
         )
         // --------------------------------------------------------------
     }

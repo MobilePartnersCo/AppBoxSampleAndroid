@@ -59,15 +59,29 @@ AppBox SDK는 [JitPack](https://jitpack.io) 저장소를 통해 제공됩니다.
 프로젝트의 build.gradle 파일에 JitPack 저장소를 추가합니다.
 
 ```
-repositories {
-    google()
-    mavenCentral()
-    maven {
-        url = uri("https://jitpack.io")
+val localProperties = java.util.Properties()
+val localPropertiesFile = File(rootDir, "local.properties")
 
-        // SDK 접근 설정
-        credentials {
-            username = "jp_ku9piga59cvtv8rlos3utncvms"
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+val gprUser: String = localProperties.getProperty("gpr.user") ?: ""
+val gprKey: String = localProperties.getProperty("gpr.key") ?: ""
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
+        maven {
+            url = uri("https://maven.pkg.github.com/MobilePartnersCo/AppBoxSDKPackage")
+            credentials {
+                username = gprUser
+                password = gprKey
+            }
         }
     }
 }
@@ -82,7 +96,7 @@ repositories {
 dependencies {
 
     // implementation 선언
-    implementation("com.github.MobilePartnersCo:AppBoxSDKPackage:all-v1.0.36")
+    implementation("com.appboxapp.sdk:web-packaging:1.0.38")
 
 }
 ```
@@ -95,6 +109,15 @@ Jetifier를 활성화하려면 gradle.properties 파일에 다음 설정을 추�
 ```
 # enableJetifier 설정
 android.enableJetifier=true
+```
+
+#### 4. local.properties 파일에 접근정보 추가
+
+가이드에 따라 local.properties 파일에 아래 접근정보를 추가합니다:
+
+```
+gpr.user={user}
+gpr.key={key}
 ```
 
 ---

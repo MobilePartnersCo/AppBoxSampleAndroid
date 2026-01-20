@@ -26,7 +26,11 @@ public class MainApplicationJava extends Application {
                 "PROJECT_ID",
                 appBoxWebConfig,
                 true,
-                R.drawable.ic_launcher_background
+                R.drawable.ic_launcher_background,
+                "",
+                "",
+                "",
+                ""
         );
         // --------------------------------------------------------------
     }
