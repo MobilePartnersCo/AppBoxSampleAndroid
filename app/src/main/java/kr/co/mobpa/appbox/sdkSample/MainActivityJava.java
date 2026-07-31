@@ -2,14 +2,12 @@ package kr.co.mobpa.appbox.sdkSample;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import kr.co.mobpa.waveAppSuiteSdk.AppBox;
-import kr.co.mobpa.waveAppSuiteSdk.data.AppBoxIntro;
-import kr.co.mobpa.waveAppSuiteSdk.data.AppBoxIntroItems;
+import kr.co.mobpa.appbox.core.AppBox;
+import kr.co.mobpa.appbox.core.AppBoxOperationCallback;
+import kr.co.mobpa.appbox.core.AppBoxSystemBarStyle;
 
 public class MainActivityJava extends AppCompatActivity {
     @Override
@@ -18,43 +16,45 @@ public class MainActivityJava extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // --------------------------------------------------------------
-        // AppBox AppBoxIntro 설정
+        // AppBox 로딩 화면 설정
+        //
+        // 인자를 줄인 형태도 제공합니다. setLoadingData() 만 호출하면 기본값을 씁니다.
         // --------------------------------------------------------------
-        List<AppBoxIntroItems> introList = new ArrayList<>();
-        introList.add(new AppBoxIntroItems("https://www.example1.com"));
-        introList.add(new AppBoxIntroItems("https://www.example2.com"));
-        introList.add(new AppBoxIntroItems("https://www.example3.com"));
-        introList.add(new AppBoxIntroItems("https://www.example4.com"));
-        AppBoxIntro appBoxIntro = new AppBoxIntro(introList);
+        AppBox.setLoadingData(null, 10f, null, null);
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
-        // AppBox 인트로 설정
+        // AppBox 시스템 바 외관 설정
+        //
+        // style 은 글자와 아이콘 기준입니다.
+        // Light 는 밝은(흰색) 글자, Dark 는 어두운(검은색) 글자입니다.
+        // 잘못된 색상값을 전달하면 호출 전체가 무시됩니다.
         // --------------------------------------------------------------
-        AppBox.getInstance().setIntro(appBoxIntro);
+        AppBox.setSystemBarAppearance("#FFFFFF", AppBoxSystemBarStyle.Dark);
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
         // AppBox 당겨서 새로고침 설정
         // --------------------------------------------------------------
-        AppBox.getInstance().setPullDownRefresh(true);
+        AppBox.setPullDownRefresh(true);
         // --------------------------------------------------------------
 
         // --------------------------------------------------------------
         // AppBox 실행
+        //
+        // success 는 화면 실행 요청이 전달됐다는 의미이며
+        // 웹페이지 로딩 완료를 뜻하지 않습니다.
         // --------------------------------------------------------------
-        AppBox.getInstance().start((isSuccess, message) -> {
-            if (isSuccess) {
-                // 실행 성공 처리
-                Log.d("AppBoxJava", "SDK 실행 성공");
-            } else {
-                // 실행 실패 처리
-                Log.e("AppBoxJava", "SDK 실행 실패: " + message);
+        AppBox.start(new AppBoxOperationCallback() {
+            @Override
+            public void onComplete(boolean success, Throwable error) {
+                if (success) {
+                    Log.d("AppBoxJava", "SDK 실행 성공");
+                } else {
+                    Log.e("AppBoxJava", "SDK 실행 실패: " + (error != null ? error.getMessage() : null));
+                }
             }
-            return null;
         });
         // --------------------------------------------------------------
-
     }
-
 }
