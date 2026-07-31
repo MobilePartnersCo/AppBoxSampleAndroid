@@ -37,6 +37,13 @@ Push, 네이티브 인앱 메시지, SNS 로그인, 걸음 수, AppsFlyer 등 �
 
 ## 샘플 실행 방법
 
+시작하기 전에 두 가지가 필요합니다.
+
+| 필요한 것 | 얻는 곳 |
+| --- | --- |
+| 저장소 접근 정보 (`gpr.user`, `gpr.key`) | [AppBox 개발 가이드](https://www.appboxapp.com/guide/appbox) |
+| 프로젝트 ID | AppBox 콘솔 |
+
 ### 1. 저장소 접근 정보 등록
 
 AppBox SDK는 인증이 필요한 Maven 저장소에서 배포됩니다. 접근 정보는 아래 가이드에서
@@ -77,14 +84,19 @@ Android Studio에서 `app` 구성을 실행합니다.
 `app/src/main/AndroidManifest.xml`에서 `MainApplicationKotlin` / `MainActivityKotlin`
 블록을 주석 처리하고 `MainApplicationJava` / `MainActivityJava` 블록의 주석을 해제합니다.
 
+`MainApplicationJava.java`에도 프로젝트 ID와 웹 주소가 따로 들어 있습니다. 2단계에서
+Kotlin 파일만 고쳤다면 Java 파일의 값도 같이 바꿔야 합니다.
+
 ### 5. 동작 확인
 
-`debugMode = true` 상태에서 logcat을 `### AppBox ###` 태그로 필터링하면 기능별 초기화
-결과를 확인할 수 있습니다.
+샘플은 초기화 결과를 `AppBoxKotlin`(Java 구성은 `AppBoxJava`) 태그로 출력합니다.
+정상이면 아무것도 출력되지 않고, 문제가 있는 기능만 경고로 남습니다.
 
 ```
-adb logcat -s "### AppBox ###"
+adb logcat -s AppBoxKotlin AppBoxJava
 ```
+
+초기화 결과 확인은 로그보다 `AppBox.initialize` 의 반환값을 우선 사용하세요.
 
 ---
 
@@ -94,13 +106,31 @@ adb logcat -s "### AppBox ###"
 
 `settings.gradle.kts`에 AppBox 저장소를 등록합니다. 이 샘플에는 이미 설정되어 있습니다.
 
+`local.properties`는 Gradle이 자동으로 읽어주지 않으므로 직접 읽는 코드가 필요합니다.
+아래 블록을 통째로 사용하세요.
+
 ```kotlin
+// settings.gradle.kts
+
+val localProperties = java.util.Properties()
+val localPropertiesFile = File(rootDir, "local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+val gprUser: String = localProperties.getProperty("gpr.user") ?: ""
+val gprKey: String = localProperties.getProperty("gpr.key") ?: ""
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+
+        // appbox-auth-kakao 를 사용할 때만 필요합니다.
         maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
+
         maven {
             url = uri("https://maven.pkg.github.com/MobilePartnersCo/AppBoxSDKPackage")
             credentials {
@@ -112,7 +142,7 @@ dependencyResolutionManagement {
 }
 ```
 
-`gprUser`와 `gprKey`는 `local.properties`에서 읽어옵니다. 넣을 값은
+`gpr.user`와 `gpr.key`에 넣을 값은
 [AppBox 개발 가이드](https://www.appboxapp.com/guide/appbox)에서 확인하세요.
 
 ### 의존성 추가
@@ -142,6 +172,10 @@ dependencies {
 
 BOM은 버전만 맞추고 artifact를 자동으로 추가하지 않습니다.
 
+`appbox-push`를 추가하면 알림 권한과 SDK 구성 요소가 AndroidManifest에 자동 병합됩니다.
+다만 Android 13 이상의 알림 **런타임 권한 요청**은 앱이 직접 해야 합니다. 방법은 개발자
+가이드를 참고하세요.
+
 ### SDK 초기화
 
 `Application.onCreate()`에서 한 번만 호출합니다. `Application` 클래스는
@@ -156,6 +190,9 @@ class MainApplicationKotlin : Application() {
         val result = AppBox.initialize(
             context = this,
             config = AppBoxInitConfig(
+                // AppBox 화면이 앱의 주 화면일 때 APPBOX_WEBVIEW 를 씁니다.
+                // 앱이 자체 화면을 쓰면 기본값 SERVICE_APP 을 그대로 두세요.
+                // 이 값에 따라 푸시 클릭을 어디로 보낼지가 달라집니다.
                 usageMode = AppBoxUsageMode.APPBOX_WEBVIEW,
                 common = AppBoxCommonConfig(
                     projectId = "PROJECT_ID",
@@ -172,6 +209,12 @@ class MainApplicationKotlin : Application() {
         if (result.core.status != AppBoxInitStatus.INITIALIZED) {
             Log.w("AppBoxKotlin", "core: " + (result.core.error?.message ?: result.core.message))
         }
+        if (result.webView.status != AppBoxInitStatus.INITIALIZED) {
+            Log.w("AppBoxKotlin", "webView: " + (result.webView.error?.message ?: result.webView.message))
+        }
+        if (result.push.status != AppBoxInitStatus.INITIALIZED) {
+            Log.w("AppBoxKotlin", "push: " + (result.push.error?.message ?: result.push.message))
+        }
     }
 }
 ```
@@ -187,33 +230,45 @@ class MainApplicationKotlin : Application() {
 
 ### AppBox 화면 실행
 
+화면을 여는 Activity에서 호출합니다.
+
 ```kotlin
-AppBox.setLoadingData(
-    loadingIcon = null,
-    sizePercentage = 10f,
-    iconColor = null,
-    backColor = null
-)
+class MainActivityKotlin : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-AppBox.setSystemBarAppearance(
-    backgroundHex = "#FFFFFF",
-    style = AppBoxSystemBarStyle.Dark
-)
+        AppBox.setLoadingData(
+            loadingIcon = null,
+            sizePercentage = 10f,
+            iconColor = null,
+            backColor = null
+        )
 
-AppBox.setPullDownRefresh(
-    used = true
-)
+        AppBox.setSystemBarAppearance(
+            backgroundHex = "#FFFFFF",
+            style = AppBoxSystemBarStyle.Dark
+        )
 
-AppBox.start { success, error ->
-    if (success) {
-        Log.d("AppBoxKotlin", "SDK 실행 성공")
-    } else {
-        Log.e("AppBoxKotlin", "SDK 실행 실패: ${error?.message}")
+        AppBox.setPullDownRefresh(
+            used = true
+        )
+
+        AppBox.start { success, error ->
+            if (success) {
+                Log.d("AppBoxKotlin", "SDK 실행 성공")
+            } else {
+                Log.e("AppBoxKotlin", "SDK 실행 실패: ${error?.message}")
+            }
+        }
     }
 }
 ```
 
 `success`는 화면 실행 요청이 전달됐다는 의미이며 웹페이지 로딩 완료를 뜻하지 않습니다.
+
+`setLoadingData`, `setSystemBarAppearance`, `setPullDownRefresh` 세 함수는 **AppBox가 띄우는
+화면에만 적용됩니다.** 이 함수를 호출한 Activity 자신의 화면은 바뀌지 않습니다.
 
 `setSystemBarAppearance`의 `style`은 **글자와 아이콘 기준**입니다. `Light`는 밝은(흰색)
 글자, `Dark`는 어두운(검은색) 글자입니다. 잘못된 색상값을 전달하면 호출 전체가 무시됩니다.
@@ -233,16 +288,25 @@ Java 사용법은 `MainApplicationJava.java`와 `MainActivityJava.java`를 참�
 
 ## 요구 사항
 
+SDK가 요구하는 값입니다.
+
 | 항목 | 값 |
 | --- | --- |
 | Android | 8.0 이상 (minSdk 26) |
 | compileSdk | 36 |
 | Java / Kotlin JVM target | 17 |
-| Gradle | 8.11.1 |
-| Android Gradle Plugin | 8.9.3 |
 | AppBox SDK | 1.3.36 |
 
 `appbox-core`가 JVM 17로 컴파일되어 있어 앱도 JVM target 17이어야 합니다.
+
+아래는 이 샘플이 사용하는 빌드 환경입니다. 최소 버전으로 검증된 값은 아니며, 더 낮은
+버전에서도 동작할 수 있습니다.
+
+| 항목 | 값 |
+| --- | --- |
+| Gradle | 8.11.1 |
+| Android Gradle Plugin | 8.9.3 |
+| Kotlin | 2.0.21 |
 
 ---
 
@@ -253,7 +317,9 @@ Java 사용법은 `MainApplicationJava.java`와 `MainActivityJava.java`를 참�
 - `AppBox.initialize`는 `Application.onCreate()`에서 한 번만 호출합니다.
 - `Application` 클래스를 AndroidManifest의 `android:name`에 등록해야 합니다.
 - `Activity.onCreate()`에서 호출하지 마세요. 화면 회전 등으로 반복 호출됩니다.
-- 초기화 전에 다른 함수를 호출하면 실패합니다.
+- 초기화 전에 다른 함수를 호출하지 마세요. `setLoadingData`, `setSystemBarAppearance`,
+  `setPullDownRefresh`처럼 **실패를 알리지 않고 조용히 무시되는** 함수가 있어 원인을
+  찾기 어렵습니다.
 
 ### 2. AndroidManifest 설정
 
@@ -279,10 +345,14 @@ Java 사용법은 `MainApplicationJava.java`와 `MainActivityJava.java`를 참�
 `google-services.json`과 `google-services` plugin은 필요하지 않습니다. Firebase 설정은
 SDK가 AppBox 서버에서 받아 초기화합니다.
 
-### 4. ProGuard
+### 4. ProGuard / R8
 
-앱에서 선언할 AppBox keep 규칙은 없습니다. 각 artifact의 consumer 규칙이 자동으로
-적용됩니다.
+각 artifact가 consumer 규칙을 함께 배포하므로 앱에서 AppBox keep 규칙을 따로 선언할
+필요는 없습니다.
+
+다만 이 샘플은 `isMinifyEnabled = false` 구성이라 축소·난독화를 켠 빌드에서는 검증되지
+않았습니다. R8을 사용하는 앱은 release 빌드로 한 번 확인하고, 문제가 있으면 개발자
+가이드 또는 지원 연락처로 문의하세요.
 
 ---
 

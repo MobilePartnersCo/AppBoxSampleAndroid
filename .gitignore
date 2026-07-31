@@ -1,0 +1,11 @@
+# 저장소 접근 정보가 들어가므로 절대 커밋하지 않습니다.
+local.properties
+
+*.iml
+.gradle
+.idea
+.DS_Store
+build
+captures
+.externalNativeBuild
+.cxx
