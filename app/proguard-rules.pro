@@ -20,4 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class kr.co.mobpa.waveAppSuiteSdk.** { *; }
+# AppBox SDK 용 keep 규칙은 각 artifact 의 consumer-rules.pro 로 자동 적용됩니다.
+# 앱에서 별도로 선언할 규칙은 없습니다.
