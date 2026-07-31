@@ -39,15 +39,18 @@ Push, 네이티브 인앱 메시지, SNS 로그인, 걸음 수, AppsFlyer 등 �
 
 ### 1. 저장소 접근 정보 등록
 
-프로젝트 루트에 `local.properties` 파일을 만들고 발급받은 접근 정보를 넣습니다.
+AppBox SDK는 인증이 필요한 Maven 저장소에서 배포됩니다. 접근 정보는 아래 가이드에서
+확인하세요.
+
+> **[AppBox 개발 가이드에서 저장소 접근 정보 확인하기](https://www.appboxapp.com/guide/appbox)**
+
+확인한 값을 프로젝트 루트의 `local.properties` 파일에 넣습니다.
 이 파일은 저장소에 커밋하지 않습니다.
 
 ```
 gpr.user={user}
 gpr.key={key}
 ```
-
-접근 정보 발급은 아래 [지원](#지원) 연락처로 문의하세요.
 
 ### 2. 프로젝트 ID와 웹 주소 변경
 
@@ -108,6 +111,9 @@ dependencyResolutionManagement {
     }
 }
 ```
+
+`gprUser`와 `gprKey`는 `local.properties`에서 읽어옵니다. 넣을 값은
+[AppBox 개발 가이드](https://www.appboxapp.com/guide/appbox)에서 확인하세요.
 
 ### 의존성 추가
 
