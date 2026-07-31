@@ -47,8 +47,24 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // --------------------------------------------------------------
-    // implementation 선언
+    // AppBox SDK
+    //
+    // BOM으로 버전을 맞추고 사용할 기능의 artifact만 추가합니다.
+    // appbox-core 는 모든 구성에서 반드시 선언해야 합니다.
     // --------------------------------------------------------------
-    implementation("com.appboxapp.sdk:web-packaging:1.0.38")
+    implementation(platform("com.appboxapp.sdk:appbox-bom:1.3.36"))
+
+    implementation("com.appboxapp.sdk:appbox-core")      // 필수
+    implementation("com.appboxapp.sdk:appbox-webview")   // AppBox 관리 화면
+    implementation("com.appboxapp.sdk:appbox-push")      // 푸시 알림
+
+    // 필요할 때 아래 artifact 를 추가로 선언합니다.
+    // implementation("com.appboxapp.sdk:appbox-inapp")         // 네이티브 인앱 메시지
+    // implementation("com.appboxapp.sdk:appbox-health")        // 걸음 수
+    // implementation("com.appboxapp.sdk:appbox-appsflyer")     // AppsFlyer 딥링크
+    // implementation("com.appboxapp.sdk:appbox-auth-google")   // Google 로그인
+    // implementation("com.appboxapp.sdk:appbox-auth-apple")    // Apple 로그인
+    // implementation("com.appboxapp.sdk:appbox-auth-naver")    // Naver 로그인
+    // implementation("com.appboxapp.sdk:appbox-auth-kakao")    // Kakao 로그인
     // --------------------------------------------------------------
 }
