@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "kr.co.mobpa.appbox.sdkSample"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "kr.co.mobpa.appbox.sdkSample"
@@ -27,11 +27,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // AppBox SDK가 JVM 17로 컴파일되어 있어 소비 앱도 17이 필요합니다.
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
