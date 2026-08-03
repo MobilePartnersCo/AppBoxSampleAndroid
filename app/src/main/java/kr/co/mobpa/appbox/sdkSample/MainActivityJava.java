@@ -44,17 +44,22 @@ public class MainActivityJava extends AppCompatActivity {
         //
         // success 는 화면 실행 요청이 전달됐다는 의미이며
         // 웹페이지 로딩 완료를 뜻하지 않습니다.
+        //
+        // onCreate 는 화면 회전이나 프로세스 복귀로 다시 호출되므로
+        // savedInstanceState 가 null 인 최초 진입에서만 실행합니다.
         // --------------------------------------------------------------
-        AppBox.start(new AppBoxOperationCallback() {
-            @Override
-            public void onComplete(boolean success, Throwable error) {
-                if (success) {
-                    Log.d("AppBoxJava", "SDK 실행 성공");
-                } else {
-                    Log.e("AppBoxJava", "SDK 실행 실패: " + (error != null ? error.getMessage() : null));
+        if (savedInstanceState == null) {
+            AppBox.start(new AppBoxOperationCallback() {
+                @Override
+                public void onComplete(boolean success, Throwable error) {
+                    if (success) {
+                        Log.d("AppBoxJava", "SDK 실행 성공");
+                    } else {
+                        Log.e("AppBoxJava", "SDK 실행 실패: " + (error != null ? error.getMessage() : null));
+                    }
                 }
-            }
-        });
+            });
+        }
         // --------------------------------------------------------------
     }
 }
