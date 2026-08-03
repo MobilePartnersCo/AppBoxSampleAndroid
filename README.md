@@ -66,7 +66,7 @@ gpr.key={key}
 ```kotlin
 common = AppBoxCommonConfig(
     projectId = "PROJECT_ID",              // 콘솔에서 확인한 프로젝트 ID
-    pushIcon = R.drawable.ic_launcher_background,
+    pushIcon = R.drawable.ic_notification,
     debugMode = true
 ),
 webView = AppBoxWebViewConfig(
@@ -131,6 +131,9 @@ dependencyResolutionManagement {
         // appbox-auth-kakao 를 사용할 때만 필요합니다.
         maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
 
+        // --------------------------------------------------------------
+        // SDK 접근 설정
+        // --------------------------------------------------------------
         maven {
             url = uri("https://maven.pkg.github.com/MobilePartnersCo/AppBoxSDKPackage")
             credentials {
@@ -173,8 +176,26 @@ dependencies {
 BOM은 버전만 맞추고 artifact를 자동으로 추가하지 않습니다.
 
 `appbox-push`를 추가하면 알림 권한과 SDK 구성 요소가 AndroidManifest에 자동 병합됩니다.
-다만 Android 13 이상의 알림 **런타임 권한 요청**은 앱이 직접 해야 합니다. 방법은 개발자
-가이드를 참고하세요.
+
+Android 13 이상의 알림 **런타임 권한 요청**을 누가 하는지는 `usageMode`에 따라 다릅니다.
+
+| `usageMode` | 알림 권한 요청 |
+| --- | --- |
+| `APPBOX_WEBVIEW` | AppBox 화면 진입 시 **SDK가 알아서 요청합니다.** 앱 코드가 필요 없습니다 |
+| `SERVICE_APP` | 앱이 원하는 시점에 `AppBox.requestPushPermission` 을 호출합니다 |
+
+이 샘플은 `APPBOX_WEBVIEW` 구성이라 권한 관련 코드가 없습니다. 앱이 자체 화면을 쓰는
+`SERVICE_APP` 구성이라면 아래처럼 직접 호출합니다.
+
+```kotlin
+AppBox.requestPushPermission(this) { granted, error ->
+    // granted == true 이면 알림 권한 사용 가능 상태입니다.
+}
+```
+
+현재 상태만 확인하려면 `AppBox.isPushPermissionGranted(context) { granted, error -> }` 를
+사용합니다. Android 12 이하에서는 권한 다이얼로그 없이 현재 알림 활성화 상태를 그대로
+돌려줍니다.
 
 ### SDK 초기화
 
@@ -196,7 +217,8 @@ class MainApplicationKotlin : Application() {
                 usageMode = AppBoxUsageMode.APPBOX_WEBVIEW,
                 common = AppBoxCommonConfig(
                     projectId = "PROJECT_ID",
-                    pushIcon = R.drawable.ic_launcher_background,
+                    // 알림 small icon 은 실루엣으로 마스킹되므로 흰색/투명 전용 리소스를 씁니다.
+                    pushIcon = R.drawable.ic_notification,
                     debugMode = true
                 ),
                 webView = AppBoxWebViewConfig(
@@ -254,11 +276,15 @@ class MainActivityKotlin : AppCompatActivity() {
             used = true
         )
 
-        AppBox.start { success, error ->
-            if (success) {
-                Log.d("AppBoxKotlin", "SDK 실행 성공")
-            } else {
-                Log.e("AppBoxKotlin", "SDK 실행 실패: ${error?.message}")
+        // onCreate 는 화면 회전이나 프로세스 복귀로 다시 호출되므로
+        // 최초 진입에서만 실행합니다.
+        if (savedInstanceState == null) {
+            AppBox.start { success, error ->
+                if (success) {
+                    Log.d("AppBoxKotlin", "SDK 실행 성공")
+                } else {
+                    Log.e("AppBoxKotlin", "SDK 실행 실패: ${error?.message}")
+                }
             }
         }
     }
@@ -266,6 +292,9 @@ class MainActivityKotlin : AppCompatActivity() {
 ```
 
 `success`는 화면 실행 요청이 전달됐다는 의미이며 웹페이지 로딩 완료를 뜻하지 않습니다.
+
+`AppBox.start`는 `savedInstanceState == null` 조건 안에서 호출합니다. 조건 없이 두면 화면
+회전이나 프로세스 복귀로 `onCreate`가 다시 실행될 때마다 화면 실행을 다시 요청합니다.
 
 `setLoadingData`, `setSystemBarAppearance`, `setPullDownRefresh` 세 함수는 **AppBox가 띄우는
 화면에만 적용됩니다.** 이 함수를 호출한 Activity 자신의 화면은 바뀌지 않습니다.
@@ -350,9 +379,15 @@ SDK가 AppBox 서버에서 받아 초기화합니다.
 각 artifact가 consumer 규칙을 함께 배포하므로 앱에서 AppBox keep 규칙을 따로 선언할
 필요는 없습니다.
 
-다만 이 샘플은 `isMinifyEnabled = false` 구성이라 축소·난독화를 켠 빌드에서는 검증되지
-않았습니다. R8을 사용하는 앱은 release 빌드로 한 번 확인하고, 문제가 있으면 개발자
-가이드 또는 지원 연락처로 문의하세요.
+이 샘플의 release 빌드는 `isMinifyEnabled = true` 구성이라 R8이 실제로 도는 경로를 그대로
+지납니다. 축소·난독화를 켠 상태로 확인하려면 release 빌드를 사용하세요.
+
+```
+./gradlew :app:assembleRelease
+```
+
+난독화 관련 문제는 debug 빌드에서 재현되지 않으므로, 배포 전 release 빌드로 한 번 확인하고
+문제가 있으면 개발자 가이드 또는 지원 연락처로 문의하세요.
 
 ---
 
