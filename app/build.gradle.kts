@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "kr.co.mobpa.appbox.sdkSample"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -19,7 +19,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // AppBox artifact 는 각자 consumer 규칙을 함께 배포하므로 축소·난독화를 켠 상태가
+            // 기본 구성입니다. 이 값을 false 로 두면 R8 이 도는 경로를 한 번도 확인하지 못한
+            // 채 배포하게 됩니다.
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
