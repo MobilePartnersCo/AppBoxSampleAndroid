@@ -26,14 +26,15 @@ class MainApplicationKotlin : Application() {
                 // AppBox 관리 화면이 앱의 주 화면이므로 푸시 클릭도 이 화면으로 보냅니다.
                 usageMode = AppBoxUsageMode.APPBOX_WEBVIEW,
                 common = AppBoxCommonConfig(
-                    projectId = "PROJECT_ID",
+                    // 프로젝트 ID 와 웹 주소는 SampleConfig 한 곳에서 관리합니다.
+                    projectId = SampleConfig.PROJECT_ID,
                     // 알림 small icon 은 실루엣으로 마스킹되므로 흰색/투명 전용 리소스를 씁니다.
                     // 런처 아이콘을 넣으면 단색 사각형으로 보입니다.
                     pushIcon = R.drawable.ic_notification,
                     debugMode = true
                 ),
                 webView = AppBoxWebViewConfig(
-                    baseUrl = "https://www.example.com"
+                    baseUrl = SampleConfig.BASE_URL
                 ),
                 push = AppBoxPushConfig()
             )

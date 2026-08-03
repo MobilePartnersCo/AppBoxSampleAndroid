@@ -28,14 +28,15 @@ public class MainApplicationJava extends Application {
                 // AppBox 관리 화면이 앱의 주 화면이므로 푸시 클릭도 이 화면으로 보냅니다.
                 .setUsageMode(AppBoxUsageMode.APPBOX_WEBVIEW)
                 .setCommon(new AppBoxCommonConfig.Builder()
-                        .setProjectId("PROJECT_ID")
+                        // 프로젝트 ID 와 웹 주소는 SampleConfig 한 곳에서 관리합니다.
+                        .setProjectId(SampleConfig.PROJECT_ID)
                         // 알림 small icon 은 실루엣으로 마스킹되므로 흰색/투명 전용 리소스를 씁니다.
                         // 런처 아이콘을 넣으면 단색 사각형으로 보입니다.
                         .setPushIcon(R.drawable.ic_notification)
                         .setDebugMode(true)
                         .build())
                 .setWebView(new AppBoxWebViewConfig.Builder()
-                        .setBaseUrl("https://www.example.com")
+                        .setBaseUrl(SampleConfig.BASE_URL)
                         .build())
                 .setPush(new AppBoxPushConfig.Builder().build())
                 .build();
