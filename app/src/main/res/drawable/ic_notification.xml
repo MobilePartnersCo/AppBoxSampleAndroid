@@ -1,0 +1,19 @@
+<!--
+    푸시 알림 전용 아이콘입니다.
+
+    안드로이드는 알림 small icon 의 알파 채널만 남기고 실루엣으로 마스킹하므로,
+    앱 런처 아이콘처럼 색이 들어간 리소스를 넣으면 단색 사각형으로 보입니다.
+    흰색과 투명만 사용한 단순한 도형을 쓰세요.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,3c-0.55,0 -1,0.45 -1,1v0.6C8.7,5.1 7,7.15 7,9.6V14l-1.6,1.6c-0.3,0.3 -0.09,0.9 0.4,0.9h12.4c0.49,0 0.7,-0.6 0.4,-0.9L17,14V9.6c0,-2.45 -1.7,-4.5 -4,-5V4c0,-0.55 -0.45,-1 -1,-1z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,20c1.1,0 2,-0.9 2,-2h-4c0,1.1 0.9,2 2,2z" />
+</vector>

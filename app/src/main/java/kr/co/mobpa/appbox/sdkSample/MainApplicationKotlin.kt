@@ -27,7 +27,9 @@ class MainApplicationKotlin : Application() {
                 usageMode = AppBoxUsageMode.APPBOX_WEBVIEW,
                 common = AppBoxCommonConfig(
                     projectId = "PROJECT_ID",
-                    pushIcon = R.drawable.ic_launcher_background,
+                    // 알림 small icon 은 실루엣으로 마스킹되므로 흰색/투명 전용 리소스를 씁니다.
+                    // 런처 아이콘을 넣으면 단색 사각형으로 보입니다.
+                    pushIcon = R.drawable.ic_notification,
                     debugMode = true
                 ),
                 webView = AppBoxWebViewConfig(
