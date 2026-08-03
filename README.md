@@ -18,19 +18,21 @@ AppBox SDK를 Android 앱에 연결하는 **최소 구성 샘플**입니다. Kot
 
 | 파일 | 내용 |
 | --- | --- |
-| `MainApplicationKotlin.kt` / `MainApplicationJava.java` | SDK 초기화와 초기화 결과 확인 |
+| `SampleConfig.kt` | **프로젝트 ID와 웹 주소.** 바꿔야 하는 값은 여기 하나뿐입니다 |
+| `MainApplicationKotlin.kt` / `MainApplicationJava.java` | SDK 초기화, 초기화 결과 확인, 푸시 클릭 처리 |
 | `MainActivityKotlin.kt` / `MainActivityJava.java` | 로딩 화면·시스템 바·당겨서 새로고침 설정과 AppBox 화면 실행 |
 
 시연하는 기능은 다음과 같습니다.
 
 - `AppBox.initialize` — 프로젝트 ID와 웹 주소로 SDK 초기화
 - 초기화 결과 확인 — `core`, `webView`, `push` 상태를 각각 확인
+- `AppBox.setPushEventListener` — 푸시 알림 클릭 처리
 - `AppBox.setLoadingData` — 로딩 화면 설정
 - `AppBox.setSystemBarAppearance` — 상태바·내비게이션 바 외관 설정
 - `AppBox.setPullDownRefresh` — 당겨서 새로고침 사용 여부
 - `AppBox.start` — AppBox 관리 화면 실행
 
-Push, 네이티브 인앱 메시지, SNS 로그인, 걸음 수, AppsFlyer 등 나머지 기능의 사용법은
+네이티브 인앱 메시지, SNS 로그인, 걸음 수, AppsFlyer 등 나머지 기능의 사용법은
 개발자 가이드를 참고하세요.
 
 ---
@@ -61,17 +63,14 @@ gpr.key={key}
 
 ### 2. 프로젝트 ID와 웹 주소 변경
 
-`MainApplicationKotlin.kt`에서 두 값을 실제 값으로 바꿉니다.
+`SampleConfig.kt`의 두 값을 실제 값으로 바꿉니다. **고쳐야 할 곳은 이 파일 하나입니다.**
+Kotlin 구성과 Java 구성이 모두 이 값을 참조합니다.
 
 ```kotlin
-common = AppBoxCommonConfig(
-    projectId = "PROJECT_ID",              // 콘솔에서 확인한 프로젝트 ID
-    pushIcon = R.drawable.ic_notification,
-    debugMode = true
-),
-webView = AppBoxWebViewConfig(
-    baseUrl = "https://www.example.com"    // 앱으로 패키징할 웹 주소
-)
+object SampleConfig {
+    const val PROJECT_ID: String = "PROJECT_ID"              // 콘솔에서 확인한 프로젝트 ID
+    const val BASE_URL: String = "https://www.example.com"   // 앱으로 패키징할 웹 주소
+}
 ```
 
 ### 3. 실행
@@ -81,11 +80,27 @@ Android Studio에서 `app` 구성을 실행합니다.
 ### 4. Java 구성으로 전환하기
 
 기본값은 Kotlin 구성입니다. Java 구성을 확인하려면
-`app/src/main/AndroidManifest.xml`에서 `MainApplicationKotlin` / `MainActivityKotlin`
-블록을 주석 처리하고 `MainApplicationJava` / `MainActivityJava` 블록의 주석을 해제합니다.
+`app/src/main/AndroidManifest.xml`에서 두 곳만 바꿉니다.
 
-`MainApplicationJava.java`에도 프로젝트 ID와 웹 주소가 따로 들어 있습니다. 2단계에서
-Kotlin 파일만 고쳤다면 Java 파일의 값도 같이 바꿔야 합니다.
+1. `application`의 `android:name`을 `.MainApplicationJava`로 변경
+2. `intent-filter`를 `MainActivityKotlin`에서 `MainActivityJava`로 이동
+
+```xml
+<application android:name=".MainApplicationJava" ...>
+
+    <activity android:name=".MainActivityKotlin" android:exported="true" />
+
+    <activity android:name=".MainActivityJava" android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+
+</application>
+```
+
+프로젝트 ID와 웹 주소는 `SampleConfig.kt` 한 곳에 있으므로 따로 바꿀 값은 없습니다.
 
 ### 5. 동작 확인
 
@@ -216,13 +231,13 @@ class MainApplicationKotlin : Application() {
                 // 이 값에 따라 푸시 클릭을 어디로 보낼지가 달라집니다.
                 usageMode = AppBoxUsageMode.APPBOX_WEBVIEW,
                 common = AppBoxCommonConfig(
-                    projectId = "PROJECT_ID",
+                    projectId = SampleConfig.PROJECT_ID,
                     // 알림 small icon 은 실루엣으로 마스킹되므로 흰색/투명 전용 리소스를 씁니다.
                     pushIcon = R.drawable.ic_notification,
                     debugMode = true
                 ),
                 webView = AppBoxWebViewConfig(
-                    baseUrl = "https://www.example.com"
+                    baseUrl = SampleConfig.BASE_URL
                 ),
                 push = AppBoxPushConfig()
             )
@@ -249,6 +264,23 @@ class MainApplicationKotlin : Application() {
 | `INITIALIZED` | 기능 사용 준비 완료 |
 | `SKIPPED` | 설정을 넣지 않았거나 artifact를 추가하지 않음 |
 | `FAILED` | 설정값 또는 초기화 과정 오류 |
+
+### 푸시 클릭 처리
+
+알림 권한 요청과 알림 표시는 SDK가 처리합니다. 사용자가 알림을 클릭했을 때 무엇을 할지는
+앱이 정합니다.
+
+```kotlin
+AppBox.setPushEventListener(object : PushEventListener {
+    override fun onPushClicked(context: Context, payload: PushEventPayload) {
+        // payload.param 을 보고 원하는 화면으로 이동시킵니다.
+        Log.d("AppBoxKotlin", "푸시 클릭: title=${payload.title}, param=${payload.param}")
+    }
+})
+```
+
+`payload`는 `title`, `message`, `param`, `paramType`을 담고 있습니다. listener는 하나만
+유지되며 다시 호출하면 교체됩니다. `null`을 전달하면 등록이 해제됩니다.
 
 ### AppBox 화면 실행
 
@@ -309,7 +341,8 @@ Java 사용법은 `MainApplicationJava.java`와 `MainActivityJava.java`를 참�
 
 ## 개발자 가이드
 
-전체 공개 함수, 기능별 연동 방법, 오류 코드는 개발자 가이드를 참고하세요.
+이 저장소는 SDK를 연결해 화면을 띄우는 최소 구성만 다룹니다. **전체 공개 함수의 파라미터와
+반환값, 기능별 연동 방법, 오류 코드는 개발자 가이드가 기준입니다.**
 
 - **가이드**: [https://www.appboxapp.com/guide/dev](https://www.appboxapp.com/guide/dev)
 
@@ -336,6 +369,7 @@ SDK가 요구하는 값입니다.
 | Gradle | 8.11.1 |
 | Android Gradle Plugin | 8.9.3 |
 | Kotlin | 2.0.21 |
+| targetSdk | 36 |
 
 ---
 
