@@ -27,13 +27,15 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+
+        // appbox-auth-kakao 를 사용할 때만 필요합니다.
         maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
+
+        // --------------------------------------------------------------
+        // SDK 접근 설정
+        // --------------------------------------------------------------
         maven {
             url = uri("https://maven.pkg.github.com/MobilePartnersCo/AppBoxSDKPackage")
-            // --------------------------------------------------------------
-            // SDK 접근 설정
-            // --------------------------------------------------------------
             credentials {
                 username = gprUser
                 password = gprKey
