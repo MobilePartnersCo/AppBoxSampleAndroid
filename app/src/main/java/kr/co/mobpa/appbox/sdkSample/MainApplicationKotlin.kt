@@ -1,6 +1,7 @@
 package kr.co.mobpa.appbox.sdkSample
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import kr.co.mobpa.appbox.core.AppBox
 import kr.co.mobpa.appbox.core.AppBoxCommonConfig
@@ -9,6 +10,8 @@ import kr.co.mobpa.appbox.core.AppBoxInitStatus
 import kr.co.mobpa.appbox.core.AppBoxPushConfig
 import kr.co.mobpa.appbox.core.AppBoxUsageMode
 import kr.co.mobpa.appbox.core.AppBoxWebViewConfig
+import kr.co.mobpa.appbox.core.push.PushEventListener
+import kr.co.mobpa.appbox.core.push.PushEventPayload
 
 class MainApplicationKotlin : Application() {
     override fun onCreate() {
@@ -55,6 +58,27 @@ class MainApplicationKotlin : Application() {
         if (result.push.status != AppBoxInitStatus.INITIALIZED) {
             Log.w("AppBoxKotlin", "push: " + (result.push.error?.message ?: result.push.message))
         }
+        // --------------------------------------------------------------
+
+        // --------------------------------------------------------------
+        // 푸시 클릭 처리
+        //
+        // 알림 권한 요청과 알림 표시는 SDK 가 처리합니다.
+        // 사용자가 알림을 클릭했을 때 무엇을 할지는 앱이 정합니다.
+        //
+        // listener 는 하나만 유지되며 다시 호출하면 교체됩니다.
+        // null 을 전달하면 등록을 해제합니다.
+        // --------------------------------------------------------------
+        AppBox.setPushEventListener(object : PushEventListener {
+            override fun onPushClicked(context: Context, payload: PushEventPayload) {
+                Log.d(
+                    "AppBoxKotlin",
+                    "푸시 클릭: title=${payload.title}, param=${payload.param}, paramType=${payload.paramType}"
+                )
+
+                // 여기서 payload.param 을 보고 원하는 화면으로 이동시킵니다.
+            }
+        })
         // --------------------------------------------------------------
     }
 }
