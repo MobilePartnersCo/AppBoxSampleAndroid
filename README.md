@@ -11,6 +11,19 @@
 
 ---
 
+## 공식 링크
+
+- [Android 샘플 앱](https://github.com/MobilePartnersCo/AppBoxSampleAndroid)
+- [iOS 샘플 앱](https://github.com/MobilePartnersCo/AppBoxSampleiOS)
+- [AppBox SDK 가이드](https://www.appboxapp.com/guide/appbox)
+- [AppBox](https://www.appboxapp.com)
+
+샘플 앱은 통합 흐름을 확인하기 위한 참고 자료입니다. 샘플 앱의 의존성 버전과 현재 배포
+버전이 항상 같다고 가정하지 말고, 새 통합에서는 BOM의 최신 버전과 공개 API를 기준으로
+구현하세요.
+
+---
+
 ## 이 저장소가 보여주는 것
 
 AppBox SDK를 Android 앱에 연결하는 **최소 구성 샘플**입니다. Kotlin과 Java 두 가지 형태로
@@ -342,9 +355,12 @@ Java 사용법은 `MainApplicationJava.java`와 `MainActivityJava.java`를 참�
 ## 개발자 가이드
 
 이 저장소는 SDK를 연결해 화면을 띄우는 최소 구성만 다룹니다. **전체 공개 함수의 파라미터와
-반환값, 기능별 연동 방법, 오류 코드는 개발자 가이드가 기준입니다.**
+request·response, 오류 코드와 플랫폼별 세부 계약은 AppBox SDK 가이드가 기준입니다.**
 
-- **가이드**: [https://www.appboxapp.com/guide/dev](https://www.appboxapp.com/guide/dev)
+- [AppBox SDK 가이드](https://www.appboxapp.com/guide/appbox)
+
+Push, 네이티브 인앱 메시지, SNS 로그인, 걸음 수, AppsFlyer 등 이 샘플이 다루지 않는 기능도
+가이드에서 확인하세요.
 
 ---
 
